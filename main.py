@@ -22,17 +22,17 @@ if __name__ == '__main__':
         binary_img = image_matrix > higher_thresh
 
         # Identifiyng the connected components of the image
-        components, label_matrix, _ = get_connected_components(binary_img)
+        label_matrix, labels = get_connected_components(binary_img)
 
         # Identifying and removing border components
-        border_comp_indices = get_border_components(components=components, image_shape=binary_img.shape)
-        for indices in border_comp_indices: 
-            binary_img[indices] = 0
+        border_labels = get_border_components(label_matrix, labels=labels)
+        for label in border_labels:
+            binary_img = (binary_img & ~(label_matrix == label))
         
         # Identifying and removing small components
-        small_comp_indices = get_small_components(components=components, min_size=1850)
-        for indices in small_comp_indices:
-            binary_img[indices] = 0
+        small_labels = get_small_components(label_matrix, min_size=1850)
+        for label in small_labels:
+            binary_img = (binary_img & ~(label_matrix == label))
         
         # Calculating the central point of the image
         centroid = numpy.around(numpy.mean(numpy.nonzero(binary_img), axis=1))

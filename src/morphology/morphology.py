@@ -58,76 +58,67 @@ def get_connected_components(img_matrix):
     # Recovering labels
     labels = numpy.unique(label_matrix[label_matrix != 0])
             
-    # Recovering the indices of individual connected components
-    # Talvez se essa parte do codigo for vetorizada, algum ganho de performance pode ser obtido
-    indices_list = []
-    for label in labels:
-        indices_list.append(numpy.nonzero(label_matrix == label))
-
-    return indices_list, label_matrix, labels
+    return label_matrix, labels
 
 
-def get_border_components(img_matrix=None, image_shape=None, components=None, max_border_pixels=1):
+def get_border_components(label_matrix=None, labels=None, img_matrix=None, max_border_pixels=1):
 
     """
         Identifies and returns border components
 
         args:
+            label_matrix: Numpy array with same shape of the image containing component labels
             img_matrix: Numpy array representing a binary image
-            image_size: Tuple containing the dimensions of the image
-            components: Numpy array containing lists of component indices
-            max_border_pixels: Maximum amount of border pixels permited per component. If a component exceeds
+            max_border_pixels: Maximum amount of border pixels allowed per component. If a component exceeds
             the maximum amount of border pixels, it's considered a border_component
         
         returns:
-            A numpy array containing the indices of border componenents  
+            A numpy array containing the labels of border components  
     """
 
-    if not img_matrix and not components:
-        raise Exception('Either an image matrix or a list of component indices must be provided')
-    
-    if not img_matrix and not image_shape:
-        raise Exception('image_shape must be provided in the absence of a image matrix')
-    
-    if img_matrix and not image_shape:
-        image_shape = img_matrix.shape
+    if img_matrix is None and label_matrix is None:
+        raise Exception('Either an image matrix or a label_matrix of need to be provided')
 
-    if img_matrix and not components:
-        components = get_connected_components(img_matrix)
+    if img_matrix is not None and label_matrix is None:
+        label_matrix, labels = get_connected_components(img_matrix)
 
-    temp = numpy.zeros(shape=(image_shape[0] - 1, image_shape[1] - 1), dtype=numpy.int8)
+    if label_matrix is not None and labels is None:
+        labels = numpy.unique(label_matrix)
+
+    temp = numpy.zeros(shape=(label_matrix.shape[0] - 2, label_matrix.shape[1] - 2), dtype=int)
     border_mask = numpy.pad(temp, pad_width=1, constant_values=1)
-    components_mask = numpy.zeros_like(border_mask)
-    
-    def filter_border(component):
-        components_mask[component] = 1
-        border_comp = numpy.count_nonzero(components_mask & border_mask) > max_border_pixels
-        components_mask[:, :] = 0
-        return border_comp
 
-    return list(filter(filter_border, components))
+    def filter_border(label):
+        label_mask = label_matrix == label
+        return numpy.count_nonzero(label_mask & border_mask) > max_border_pixels
 
-def get_small_components(img_matrix=None, components=None, min_size=None):
+    return list(filter(filter_border, labels))
+        
+
+def get_small_components(label_matrix=None, img_matrix=None, labels=None, min_size=None):
     
     """
         Identifies and returns small componenents
 
         args:
+            label_matrix: Numpy array with same shape of the image containing component labels
             img_matrix: Numpy array representing a binary image
-            components: Numpy array containing lists of component indices
             min_size: The minimum size that a component should have to not be considered small
 
         returns:
             A numpy array containing the indices of small objects
     """
 
-    if not min_size:
-        raise Exception('A minimum size must be provided')
+    if min_size is None:
+        raise Exception('An minimum size must be provided')
     
-    if not img_matrix and not components:
-        raise Exception('Either a image matrix or a list of component indices must be provided')
+    if img_matrix is None and label_matrix is None:
+        raise Exception('Either an image matrix or a label_matrix must be provided')
     
-    if img_matrix and not components:
-        components = get_connected_components(img_matrix)
+    if img_matrix is not None and label_matrix is None:
+        label_matrix, labels = get_connected_components(img_matrix)
 
-    return list(filter(lambda component: component[0].size < min_size, components))
+    if label_matrix is not None and labels is None:
+        labels = numpy.unique(label_matrix)
+
+    return list(filter(lambda label: numpy.count_nonzero(label_matrix == label) < min_size, labels))
