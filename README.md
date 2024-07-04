@@ -9,6 +9,7 @@ The proposed solution is as follows:
 4. Remove objects that have less than 1850 pixels
 5. Retrieve the coordinates of active pixels and calculate the arithmetic mean for the X and Y coordinates
 
-To achieve this pipeline, three functions were implemented. Their implementation can be verified in the morphology package. A brief descripttion of their behavior is given bellow.
+To achieve this pipeline, three functions were implemented. Their implementation can be verified in the aux_funcs module. A brief description of their behavior is given bellow.
 
 ## Implemented Functions
+
