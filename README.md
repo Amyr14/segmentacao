@@ -1,5 +1,5 @@
 ## Description
-This is an image processing course assignment on the topic of image segmentation. It was requested the development an algorithm that could read an image of a sutter, remove unwanted objects in a manner that only the sutter remained and finally calculate it's centroid coordinates. A more elaborate description of the solution can be found in the file "segmentacao.pdf", which is the portuguese-written assigment's report.
+This is an image processing course assignment on the topic of image segmentation. It was requested the development an algorithm that could read an image of a solder, remove unwanted objects in a manner that only the solder remained and finally calculate it's centroid coordinates. A more elaborate description of the solution can be found in the file "segmentacao.pdf", which is the portuguese-written assigment's report.
 
 ## Solution
 The proposed solution is as follows:
@@ -13,7 +13,7 @@ To achieve this pipeline, three functions were implemented. Their implementation
 
 ![image](https://github.com/Amyr14/segmentation/assets/69065770/facc4008-2304-4275-b9aa-c57e1a218296)
 
-*Labeled components in a sutter image*
+*Labeled components in a solder's image*
 
 ## Implemented Functions
 #### get_connected_components
