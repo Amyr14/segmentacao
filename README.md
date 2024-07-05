@@ -1,5 +1,5 @@
 ## Description
-This is an image processing course assignment on the topic of image segmentation. It was requested the development an algorithm that could read an image of a solder, remove unwanted objects in a manner that only the solder remained and finally calculate it's centroid coordinates. A more elaborate description of the solution can be found in the file "segmentacao.pdf", which is the portuguese-written assigment's report.
+Image processing course assignment on the topic of image segmentation. It was requested the development an algorithm that could read an image of a solder, remove unwanted objects in a manner that only the solder remained and finally calculate it's centroid coordinates. A more elaborate description of the solution can be found in the file "segmentacao.pdf", which is the portuguese-written assigment's report.
 
 ## Solution
 The proposed solution is as follows:
